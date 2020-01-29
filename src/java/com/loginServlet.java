@@ -31,7 +31,7 @@ public class loginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             String page = request.getParameter("page");  //using page name to go back if user/pass is incorrect
@@ -46,17 +46,13 @@ public class loginServlet extends HttpServlet {
                 ResultSet rs = db.selectCustomer(username, password);   //using function in db to find user
                 ResultSet rs2 = db.selectDriver(username, password);
                 ResultSet rs3 = db.selectAdmin(username, password);
+                if(page.equals("CustomerLogin.jsp")){   //if using customer login page
                 if (rs.next()) { //if user exists
                     HttpSession session = request.getSession(); //create session
                     request.getSession().setAttribute("customer", username); //making specific sessions
                     RequestDispatcher view = request.getRequestDispatcher("Customer.jsp");
                     view.forward(request, response);
-                } else if (rs2.next()) {
-                    HttpSession session = request.getSession(); //same thing as before
-                    request.getSession().setAttribute("driver", username);
-                    RequestDispatcher view = request.getRequestDispatcher("Driver.jsp");
-                    view.forward(request, response);
-                } else if (rs3.next()) {
+                }else if (rs3.next()) {
                     HttpSession session = request.getSession();
                     request.getSession().setAttribute("admin", username);
                     RequestDispatcher view = request.getRequestDispatcher("Admin.jsp");
@@ -66,8 +62,25 @@ public class loginServlet extends HttpServlet {
                     RequestDispatcher view = request.getRequestDispatcher(page);
                     view.forward(request, response);
                 }
+                }else if(page.equals("DriverLogin.jsp")){   //if using driver login page
+                    if (rs2.next()) {
+                    HttpSession session = request.getSession(); //same thing as before
+                    request.getSession().setAttribute("driver", username);
+                    RequestDispatcher view = request.getRequestDispatcher("Driver.jsp");
+                    view.forward(request, response);
+                }else if (rs3.next()) {
+                    HttpSession session = request.getSession();
+                    request.getSession().setAttribute("admin", username);
+                    RequestDispatcher view = request.getRequestDispatcher("Admin.jsp");
+                    view.forward(request, response);
+                }else { //if not found go to loginpage
+                    request.setAttribute("error","Invalid Username or Password");
+                    RequestDispatcher view = request.getRequestDispatcher(page);
+                    view.forward(request, response);
+                } 
+                }
             }else{  //if session already created go back to homepage
-                RequestDispatcher view = request.getRequestDispatcher("home.jsp");
+                RequestDispatcher view = request.getRequestDispatcher("home.html"); //will change to jsp later
                 view.forward(request, response);
             }
 
@@ -76,7 +89,4 @@ public class loginServlet extends HttpServlet {
         }
 
     }
-
-   
-
 }
