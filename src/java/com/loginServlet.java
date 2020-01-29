@@ -80,7 +80,7 @@ public class loginServlet extends HttpServlet {
                 } 
                 }
             }else{  //if session already created go back to homepage
-                RequestDispatcher view = request.getRequestDispatcher("home.html"); //will change to jsp later
+                RequestDispatcher view = request.getRequestDispatcher("Home.html"); //will change to jsp later
                 view.forward(request, response);
             }
 
