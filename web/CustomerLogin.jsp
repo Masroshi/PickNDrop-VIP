@@ -17,7 +17,7 @@
                 </video>
             </div>
         
-        <form class="box" action="loginServlet.do" method="get">
+        <form class="box" action="loginServlet.do" method="post">
             
             <h1>Login</h1>
             <%
