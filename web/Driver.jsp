@@ -1,6 +1,5 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" href="css/Customer.css"/>
@@ -8,7 +7,32 @@
         <title>Driver Page</title>
     </head>
     <body>
+        <form action="loginServlet.do" method ="get">
+        <div> 
+            <%
+                if (session.getAttribute("driver") == null) {//if session is null rename button to login else logout
+                    //when clicked it opens driverlogin page
+            %>                                              
+            <button type="button" onclick="location.href = 'DriverLogin.jsp'">Login</button>  
+            <%
+            } else {          //using function to run code when clicked
+            %>
+            <button type="submit">Logout</button>
+            <%
+                }
+            %>        
+        </div>
+       </form> 
         <section>
+            <%
+                String name = (String) session.getAttribute("driver");  //getting session with username
+                if (name != null) { //if its not null
+                    out.println("<font color=green size=5px>"+ "Welcome! " + name + "</font>");
+                } else {    
+                    out.println("cannot find");
+                }
+            %>
+            
             <h1>You are logged in to driver page</h1>
 
             <br>
@@ -17,7 +41,19 @@
 
             <p id="countdown"></p>
         </section>
-
+        <script>
+            $(document).ready(function () {
+                
+                <%  
+                    String name2 = (String) session.getAttribute("driver"); 
+                if (name2 != null) {    //if session is not found then it will redirect to driverlogin
+                    
+                } else {
+                    response.sendRedirect("DriverLogin.jsp");
+                }
+                %>
+            });
+        </script>
     </body>
 
     <script>
