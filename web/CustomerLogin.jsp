@@ -21,18 +21,38 @@
             
             <h1>Login</h1>
             <%
-            String login_msg=(String)request.getAttribute("error");  
+            String login_msg=(String)request.getAttribute("error");  //checking if error session is made
             if(login_msg!=null)
             out.println("<font color=red size=4px>"+login_msg+"</font>");
             %>
-            <input type="text" placeholder="Username" name = "username">
-            <input type="password" placeholder="Password" name = "password">
+            <input type="text" placeholder="Username" required name = "username">
+            <input type="password" placeholder="Password" required name = "password">
             <input type="hidden" name = "page" value = "CustomerLogin.jsp">
             <input type="submit" value="Login">
             <p>Not registered yet? <a href="CustomerRegistration.jsp">Register now</a></p>
             <p>Are you a registered driver? <a href="DriverLogin.jsp">Login as a driver</a></p>
             
         </form>
-        
+        <script>
+
+            $(document).ready(function () {
+
+            <%  
+            String name2 = (String) session.getAttribute("driver");
+            String name3 = (String) session.getAttribute("customer"); 
+            String name4 = (String) session.getAttribute("admin"); 
+            if (name2 != null) {    //if session is not found then it will redirect to driverlogin
+                response.sendRedirect("Driver.jsp");
+            } else if(name3 != null) {
+                response.sendRedirect("Customer.jsp");
+            }else if(name4 != null){
+                response.sendRedirect("Admin.jsp");
+            }else{
+                    
+            }
+            %>
+            });
+
+        </script>
     </body>
 </html>

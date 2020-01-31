@@ -13,7 +13,31 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <form action="loginServlet.do" method ="get">
+        <div> 
+            <%
+                if (session.getAttribute("admin") == null) {//if session is null rename button to login else logout
+                    //when clicked it opens customerlogin page
+            %>                                              
+            <button type="button" onclick="location.href = 'CustomerLogin.jsp'">Login</button>  
+            <%
+            } else {          //using function to run code when clicked
+            %>
+            <button type="submit">Logout</button>
+            <%
+                }
+            %>        
+        </div>
+       </form>     
         <section>
+            <%
+                String name = (String) session.getAttribute("admin");  //getting session with username
+                if (name != null) { //if its not null
+                    out.println("<font color=green size=5px>"+ "Welcome! " + name + "</font>");
+                } else {    
+                    out.println("cannot find");
+                }
+            %>
             <h1>You are logged in to admin page</h1>
 
             <br>
@@ -22,7 +46,19 @@
 
             <p id="countdown"></p>
         </section>
-
+        <script>
+            $(document).ready(function () {
+                
+                <%  
+                    String name2 = (String) session.getAttribute("admin"); 
+                if (name2 != null) {    //if session is not found then it will redirect to customerlogin
+                    
+                } else {
+                    response.sendRedirect("CustomerLogin.jsp");
+                }
+                %>
+            });
+        </script>
     </body>
 
     <script>

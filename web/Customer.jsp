@@ -8,7 +8,31 @@
         <title>Customer Page</title>
     </head>
     <body>
+        <form action="loginServlet.do" method ="get">
+        <div> 
+            <%
+                if (session.getAttribute("customer") == null) {//if session is null rename button to login else logout
+                    //when clicked it opens customerlogin page
+            %>                                              
+            <button type="button" onclick="location.href = 'CustomerLogin.jsp'">Login</button>  
+            <%
+            } else {          //using function to run code when clicked
+            %>
+            <button type="submit">Logout</button>
+            <%
+                }
+            %>        
+        </div>
+       </form>
         <section>
+            <%
+                String name = (String) session.getAttribute("customer");  //getting session with username
+                if (name != null) { //if it's not null
+                    out.println("<font color=green size=5px>"+ "Welcome! " + name + "</font>");
+                } else {    
+                    out.println("cannot find"); 
+                }
+            %>
             <h1>You are logged in to customer page</h1>
 
             <br>
@@ -17,6 +41,19 @@
 
             <p id="countdown"></p>
         </section>
+        <script>
+            $(document).ready(function () {
+                
+                <%  
+                    String name2 = (String) session.getAttribute("customer"); 
+                if (name2 != null) {    //if session is not found then it will redirect to customerlogin
+                    
+                } else {
+                    response.sendRedirect("CustomerLogin.jsp");
+                }
+                %>
+            });
+        </script>
         <script>
             // Set the date we're counting down to
             var countDownDate = new Date("Feb 27, 2020 18:00:00").getTime();

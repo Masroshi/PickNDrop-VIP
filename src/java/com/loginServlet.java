@@ -35,51 +35,52 @@ public class loginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String page = request.getParameter("page");  //using page name to go back if user/pass is incorrect
-            Object s = request.getSession().getAttribute("customer");   
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            HttpSession session = request.getSession(false);
+            Object s = request.getSession().getAttribute("customer");
             Object s2 = request.getSession().getAttribute("driver");
             Object s3 = request.getSession().getAttribute("admin");
-            if (s == null || s2 == null || s3 == null) {   //finding if session exists
+            if (s == null && s2 == null && s3 == null) {   //finding if session exists
                 DB db = new DB();
                 db.setConnection("root", "root");   //setting db connection
-                String username = request.getParameter("username");
-                String password = request.getParameter("password");
                 ResultSet rs = db.selectCustomer(username, password);   //using function in db to find user
                 ResultSet rs2 = db.selectDriver(username, password);
                 ResultSet rs3 = db.selectAdmin(username, password);
-                if(page.equals("CustomerLogin.jsp")){   //if using customer login page
-                if (rs.next()) { //if user exists
-                    HttpSession session = request.getSession(); //create session
-                    request.getSession().setAttribute("customer", username); //making specific sessions
-                    RequestDispatcher view = request.getRequestDispatcher("Customer.jsp");
-                    view.forward(request, response);
-                }else if (rs3.next()) {
-                    HttpSession session = request.getSession();
-                    request.getSession().setAttribute("admin", username);
-                    RequestDispatcher view = request.getRequestDispatcher("Admin.jsp");
-                    view.forward(request, response);
-                }else { //if not found go to loginpage
-                    request.setAttribute("error","Invalid Username or Password");
-                    RequestDispatcher view = request.getRequestDispatcher(page);
-                    view.forward(request, response);
-                }
-                }else if(page.equals("DriverLogin.jsp")){   //if using driver login page
+                if (page.equals("CustomerLogin.jsp")) {   //if using customer login page
+                    if (rs.next()) { //if user exists
+                        session = request.getSession(); //create session
+                        session.setAttribute("customer", username); //making specific sessions
+                        RequestDispatcher view = request.getRequestDispatcher("Customer.jsp");
+                        view.forward(request, response);
+                    } else if (rs3.next()) {
+                        session = request.getSession();
+                        session.setAttribute("admin", username);
+                        RequestDispatcher view = request.getRequestDispatcher("Admin.jsp");
+                        view.forward(request, response);
+                    } else { //if not found go to loginpage
+                        request.setAttribute("error", "Invalid Username or Password");
+                        RequestDispatcher view = request.getRequestDispatcher(page);
+                        view.forward(request, response);
+                    }
+                } else if (page.equals("DriverLogin.jsp")) {   //if using driver login page
                     if (rs2.next()) {
-                    HttpSession session = request.getSession(); //same thing as before
-                    request.getSession().setAttribute("driver", username);
-                    RequestDispatcher view = request.getRequestDispatcher("Driver.jsp");
-                    view.forward(request, response);
-                }else if (rs3.next()) {
-                    HttpSession session = request.getSession();
-                    request.getSession().setAttribute("admin", username);
-                    RequestDispatcher view = request.getRequestDispatcher("Admin.jsp");
-                    view.forward(request, response);
-                }else { //if not found go to loginpage
-                    request.setAttribute("error","Invalid Username or Password");
-                    RequestDispatcher view = request.getRequestDispatcher(page);
-                    view.forward(request, response);
-                } 
+                        session = request.getSession(); //same thing as before
+                        session.setAttribute("driver",username);
+                        RequestDispatcher view = request.getRequestDispatcher("Driver.jsp");
+                        view.forward(request, response);
+                    } else if (rs3.next()) {
+                        session = request.getSession();
+                        session.setAttribute("admin",username);
+                        RequestDispatcher view = request.getRequestDispatcher("Admin.jsp");
+                        view.forward(request, response);
+                    } else { //if not found go to loginpage
+                        request.setAttribute("error", "Invalid Username or Password");
+                        RequestDispatcher view = request.getRequestDispatcher(page);
+                        view.forward(request, response);
+                    }
                 }
-            }else{  //if session already created go back to homepage
+            } else {  //if session already created go back to homepage
                 RequestDispatcher view = request.getRequestDispatcher("Home.html"); //will change to jsp later
                 view.forward(request, response);
             }
@@ -88,5 +89,14 @@ public class loginServlet extends HttpServlet {
             Logger.getLogger(loginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        request.getSession().invalidate();
+        response.sendRedirect(request.getContextPath() + "/CustomerLogin.jsp");
+        
     }
 }
