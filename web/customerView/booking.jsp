@@ -24,13 +24,31 @@
             Loading, please wait...
         </div>
         <div id="body" style="display:none;">
-            
+
             <div class="topnav">
-            <a class="active" href="home.jsp">Home</a>
-            <a href="booking.jsp">Booking</a>
-            <a href="about.jsp">About</a>
-            <a href="contact.jsp">Contact</a>
-            <button type="button" onclick="location.href = 'login.jsp'">Login</button>
+                <a class="active" href="home.jsp">Home</a>
+                <a href="booking.jsp">Booking</a>
+                <a href="viewBooking.jsp">View Booking</a>
+                <a href="about.jsp">About</a>
+                <a href="contact.jsp">Contact</a>
+                <form action="${pageContext.servletContext.contextPath}/loginServlet.do" method ="get">
+                    <div> 
+                        <%
+                            if (session.getAttribute("customer") == null) {//if session is null rename button to login else logout
+                                //when clicked it opens customerlogin page
+                        %>
+                        <input type="hidden" name = "loginGet" value = "loginGet">
+                        <button type="submit">Login</button>  
+                        <%
+                        } else {          //using function to run code when clicked
+                        %>
+                        <input type="hidden" name = "logout" value = "logout">
+                        <button type="submit">Logout</button>
+                        <%
+                            }
+                        %>        
+                    </div>
+                </form>
             </div> 
         </div>
         <script type="text/javascript">

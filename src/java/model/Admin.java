@@ -5,39 +5,39 @@
  */
 package model;
 
-import static model.SprintOneDatabase.adminList; // using admin list to store admin users
-
-
+import static model.Booking.adminList;
 
 /**
  *
  * @author NUser1
  */
-public class Admin {
-private String adminID;
-    private String username;            //admin attributes
+public class Admin{
+    private String adminID;
+    private String username;
     private String name;
     private String email;
     private String password;
     
 
-    public Admin() {            //empty constructor
+    public Admin() {
     }
 
     public Admin(String username, String name, String email, String password) {
-        this.adminID = adminID();       //initialize attributes 
+        this.adminID = adminID();
         this.username = username;
         this.name = name;
         this.email = email;
         this.password = password;
     }
+
+    
     
     public final String adminID(){
         String tempID = ("A".concat(Integer.toString(adminList.size() + 0)));
-        return  tempID;         //giving id with letter
+        return  tempID;
     }
     
-    public String getAdminID() {        //getters and setters to use admin users attributes
+    public String getAdminID() {
         return adminID;
     }
 
@@ -52,7 +52,7 @@ private String adminID;
     public void setUsername(String username) {
         this.username = username;
     }
-
+    
     public String getName() {
         return name;
     }
@@ -77,5 +77,6 @@ private String adminID;
         this.password = password;
     }
 
+   
     
 }

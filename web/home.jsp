@@ -1,8 +1,3 @@
-<%-- 
-    Document   : home
-    Created on : Jan 2, 2020, 10:32:55 PM
-    Author     : NUser1
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

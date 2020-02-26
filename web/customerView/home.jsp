@@ -18,7 +18,7 @@
 
             Loading, please wait...
         </div>
-        <div id="body" style="display:none;">
+       <div id="body" style="display:none;">
 
             <div class="topnav">
                 <a class="active" href="home.jsp">Home</a>

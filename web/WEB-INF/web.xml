@@ -1,16 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>adminAuthenticationFilter</filter-name>
+        <filter-class>com.adminAuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>driverAuthenticationFilter</filter-name>
+        <filter-class>com.driverAuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>customerAuthenticationFilter</filter-name>
+        <filter-class>com.customerAuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>customerAuthenticationFilter</filter-name>
+        <url-pattern>/customerView/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>driverAuthenticationFilter</filter-name>
+        <url-pattern>/driverView/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>adminAuthenticationFilter</filter-name>
+        <url-pattern>/adminView/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>com.loginServlet</servlet-class>
+    </servlet>
+    <welcome-file-list>
+        <welcome-file>home.jsp</welcome-file>
+    </welcome-file-list>
+    <servlet>
+        <servlet-name>calcServlet</servlet-name>
+        <servlet-class>com.calcServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>bookingServlet</servlet-name>
+        <servlet-class>com.bookingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>bookingServlet2</servlet-name>
+        <servlet-class>com.bookingServlet2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>bookingServlet3</servlet-name>
+        <servlet-class>com.bookingServlet3</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>availableServlet</servlet-name>
+        <servlet-class>com.availableServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet.do</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>calcServlet</servlet-name>
+        <url-pattern>/calcServlet.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bookingServlet</servlet-name>
+        <url-pattern>/bookingServlet.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bookingServlet2</servlet-name>
+        <url-pattern>/bookingServlet2.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bookingServlet3</servlet-name>
+        <url-pattern>/bookingServlet3.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>availableServlet</servlet-name>
+        <url-pattern>/availableServlet.do</url-pattern>
+    </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>20</session-timeout>
     </session-config>
 </web-app>
