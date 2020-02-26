@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 public class DB {
 
     static final String driver = "org.apache.derby.jdbc.ClientDriver";
-    static final String databaseUrl = "jdbc:derby://localhost:1527/SprintOneDatabase";
+    static final String databaseUrl = "jdbc:derby://localhost:1527/SprintTwoDatabase";
     private Connection connection = null;
     private Statement stmt = null;
     private PreparedStatement ps = null;
@@ -29,7 +29,7 @@ public class DB {
 
     public DB() {
     }
-    //db connection
+
     public void setConnection(String user, String password) { //source from Histogram zip file in practicals
 
         try {
@@ -49,37 +49,34 @@ public class DB {
         }
 
     }
-    //selecting user from customer table
+
     public ResultSet selectCustomer(String user, String pass) throws SQLException {
-        
-        ps = connection.prepareStatement("SELECT * FROM CUSTOMER where USERNAME=?");    //selecting
+
+        ps = connection.prepareStatement("SELECT * FROM CUSTOMER where USERNAME=?");
         ps.setString(1, user);
         rs = ps.executeQuery();
 
-        while (rs.next()) {     //going through table
+        while (rs.next()) {
 
-            String u = rs.getString("USERNAME");    
+            String u = rs.getString("USERNAME");
             String password = rs.getString("PASSWORD");
             if (u.equals(user)) {
-                boolean matched = SCryptUtil.check(pass, password); //using scrypt jar to find verify hash pass
+                boolean matched = SCryptUtil.check(pass, password);
                 if (matched == true) {
-                    pass = password;    //swapping hashpass with password
+                    pass = password;
                 }
             }
         }
-        //selecting with swapped pass and username
-        ps = connection.prepareStatement("SELECT * FROM CUSTOMER where USERNAME=? and PASSWORD=?"); 
+        ps = connection.prepareStatement("SELECT * FROM CUSTOMER where USERNAME=? and PASSWORD=?");
         ps.setString(1, user);
         ps.setString(2, pass);
         rs = ps.executeQuery();
         return rs;
         
     }
-    //selecting user from driver table
+    
     public ResultSet selectDriver(String user, String pass) throws SQLException {
-        /*
-        same thing as before
-        */
+
         ps = connection.prepareStatement("SELECT * FROM DRIVER where USERNAME=?");
         ps.setString(1, user);
         rs = ps.executeQuery();
@@ -102,11 +99,9 @@ public class DB {
         return rs;
         
     }
-    //selecting user from admin table
+    
     public ResultSet selectAdmin(String user, String pass) throws SQLException {
-        /*
-        same thing as before
-        */
+
         ps = connection.prepareStatement("SELECT * FROM ADMIN where USERNAME=?");
         ps.setString(1, user);
         rs = ps.executeQuery();

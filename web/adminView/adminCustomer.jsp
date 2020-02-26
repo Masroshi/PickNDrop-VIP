@@ -1,5 +1,9 @@
 
 
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,7 +25,7 @@
        <div id="body" style="display:none;">
 
             <div class="topnav">
-                <a class="active" href="admin.jsp">Home</a>
+               <a class="active" href="admin.jsp">Home</a>
                 <a href="adminCustomer.jsp">Customer</a>
                  <a href="adminDriver.jsp">Driver</a>
                 <a href="adminDriverAssign.jsp">Assign Driver</a>
@@ -44,7 +48,39 @@
                         %>        
                     </div>
                 </form>
-            </div> 
+            </div>
+        <form action="${pageContext.servletContext.contextPath}/bookingServlet.do" method="post">        
+           <table border="2">
+                <tr>
+                    <td>CUSTOMER ID</td>
+                    <td>USERNAME</td>
+                    <td>NAME</td>
+                    <td>EMAIL</td>
+                    
+                </tr>  
+                <%
+                    Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
+                    PreparedStatement pp = null;
+                    String status;
+                    pp = con.prepareStatement("SELECT * FROM CUSTOMER");    //getting customer details from table
+                    
+                    ResultSet rs = pp.executeQuery();
+                    while (rs.next()) {
+                        
+                        //putting data in table
+                %>      
+                <td><%=rs.getInt("CUSTOMERID")%></td>    
+                    <td><%=rs.getString("USERNAME")%></td>                
+                    <td><%=rs.getString("NAME")%></td>
+                    <td><%=rs.getString("EMAIL")%></td> 
+                    <<tr></tr>
+                    
+                <%
+                    }
+                %>
+           </table>
+          
+           </form>
         </div>
         <script type="text/javascript">
             $(document).ready(function () {
