@@ -48,6 +48,22 @@
         <servlet-class>com.bookingServlet3</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddDriver</servlet-name>
+        <servlet-class>com.AddDriver</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ADEDriver</servlet-name>
+        <servlet-class>com.ADEDriver</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteDriver</servlet-name>
+        <servlet-class>com.DeleteDriver</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditDriver</servlet-name>
+        <servlet-class>com.EditDriver</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>availableServlet</servlet-name>
         <servlet-class>com.availableServlet</servlet-class>
     </servlet>
@@ -70,6 +86,22 @@
     <servlet-mapping>
         <servlet-name>bookingServlet3</servlet-name>
         <url-pattern>/bookingServlet3.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddDriver</servlet-name>
+        <url-pattern>/AddDriver.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ADEDriver</servlet-name>
+        <url-pattern>/ADEDriver.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteDriver</servlet-name>
+        <url-pattern>/DeleteDriver.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditDriver</servlet-name>
+        <url-pattern>/EditDriver.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>availableServlet</servlet-name>

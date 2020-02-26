@@ -1,0 +1,57 @@
+
+body{
+    margin: 0;
+    body: 0;
+}
+
+.parallax-container {
+    height: 100vh;
+}
+
+section {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+}
+
+section .content{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.tranparentBG{
+    background-color: transparent !important;
+    
+}
+
+.splash {
+    /* absolute center .splash within .splash-container */
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    position: absolute;
+    top: 100px; left: 0; bottom: 0; right: 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.splash-head {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    border: 3px solid white;
+    padding: 1em 1.6em;
+    font-weight: 100;
+    border-radius: 5px;
+    line-height: 1em;
+}
+
+.splash-subhead {
+    color: white;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    padding: 10px;
+}
