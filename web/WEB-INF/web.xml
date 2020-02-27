@@ -67,6 +67,10 @@
         <servlet-name>availableServlet</servlet-name>
         <servlet-class>com.availableServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CRegistrationServlet</servlet-name>
+        <servlet-class>com.CRegistrationServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet.do</url-pattern>
@@ -106,6 +110,10 @@
     <servlet-mapping>
         <servlet-name>availableServlet</servlet-name>
         <url-pattern>/availableServlet.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CRegistrationServlet</servlet-name>
+        <url-pattern>/CRegistrationServlet.do</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>20</session-timeout>
