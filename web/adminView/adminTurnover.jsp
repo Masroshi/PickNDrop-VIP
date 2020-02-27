@@ -1,7 +1,5 @@
 <%-- 
-    Document   : adminTurnover
-    Created on : Feb 15, 2020, 3:29:08 PM
-    Author     : NUser1
+   
 --%>
 
 <%@page import="java.sql.ResultSet"%>
@@ -68,46 +66,59 @@
                     </ul>
                 </div>
             </nav> 
+           <form action="adminTurnover.jsp">  
             <div id="customer1" class="col s12">
-                <table class="respnsive-table highlight">
-                    <tr>
-                        <td>BOOKING ID</td>
-                        <td>ORIGIN</td>
-                        <td>DESTINATION</td>
-                        <td>TOTAL</td>
-                        <td>GST</td>
-                        <td>NET TOTAL</td>
-                    </tr>  
-                    <%
-                        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
-                        PreparedStatement pp = null;
-                        int total = 0;
-                        int gst = 0;
-                        int netTotal = 0;
-                        int profit = 0;
-                        pp = con.prepareStatement("SELECT * FROM BOOKING where STATUS=?");  //taking all completed requests
-                        pp.setString(1, "COMPLETED");
-                        ResultSet rs = pp.executeQuery();
-                        while (rs.next()) {
+                
+                    <table class="respnsive-table highlight">
+                        <tr>
+                            <td>BOOKING ID</td>
+                            <td>ORIGIN</td>
+                            <td>DESTINATION</td>
+                            <td>TOTAL</td>
+                            <td>GST</td>
+                            <td>NET TOTAL</td>
+                        </tr>  
+                        <%
+                            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
+                            PreparedStatement pp = null;
+                            int total = 0;
+                            int gst = 0;
+                            int netTotal = 0;
+                            int profit = 0;
+                            //int driverID =3;
+                            //int driverID = Integer.parseInt(request.getParameter("driverID"));
+                            int driverID = 0;
+                            String driverIDStr = request.getParameter("driverID");
+                            if (driverIDStr != null && driverIDStr.trim().length() > 0) {
+                                Integer.parseInt(driverIDStr);
+                            }
+                            pp = con.prepareStatement("SELECT * FROM BOOKING where STATUS=? AND DRIVERID=?");  //taking all completed requests from specified driverid
+                            pp.setString(1, "COMPLETED");
+                            pp.setString(2,driverIDStr);
+                            ResultSet rs = pp.executeQuery();
+                            while (rs.next()) {
 
-                            total = rs.getInt("TOTAL"); //inserting to table
-                    %>
-                    <td><%=rs.getInt("BOOKINGID")%></td>    
-                    <td><%=rs.getString("ORIGIN")%></td>                
-                    <td><%=rs.getString("DESTINATION")%></td>
-                    <td><%=rs.getInt("TOTAL")%></td>
-                    <td><%=gst = rs.getInt("TOTAL") * 5 / 100%></td> 
-                    <td><%=netTotal = rs.getInt("TOTAL") + gst%></td> 
-                    <tr></tr>
+                                total = rs.getInt("TOTAL"); //inserting to table
+%>
+                        <td><%=rs.getInt("BOOKINGID")%></td>    
+                        <td><%=rs.getString("ORIGIN")%></td>                
+                        <td><%=rs.getString("DESTINATION")%></td>
+                        <td><%=rs.getInt("TOTAL")%></td>
+                        <td><%=gst = rs.getInt("TOTAL") * 5 / 100%></td> 
+                        <td><%=netTotal = rs.getInt("TOTAL") + gst%></td> 
+                        <tr></tr>
 
-                    <%
-                            profit += netTotal;
+                        <%
+                                profit += netTotal;
 
-                        }
-                    %>
-                </table>       
+                            }
+                        %>
+                    </table>      
+                    <input type="text" placeholder="driver id" name = "driverID" required>                
+            <input type="submit" value ="submit" name = "submit">
+           </form>
             </div>
-                <li>
+            <li>
                 <div class="divider"></div>
             </li>
             <li>
@@ -115,6 +126,7 @@
             </li>
             <div>
                 <p>Total Profit: <% out.println(profit);%></p>
+                
             </div>
         </div>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
