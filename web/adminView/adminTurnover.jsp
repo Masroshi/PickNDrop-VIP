@@ -1,3 +1,9 @@
+<%-- 
+    Document   : adminTurnover
+    Created on : Feb 15, 2020, 3:29:08 PM
+    Author     : NUser1
+--%>
+
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -61,40 +67,55 @@
                         <li><a href="adminTurnover.jsp">Turnover</a></li>
                     </ul>
                 </div>
-            </nav>
-            <form action="${pageContext.servletContext.contextPath}/bookingServlet.do" method="post">        
-                <div id="customer1" class="col s12">
-                    <table class="respnsive-table highlight">
-                        <tr>
-                            <td>CUSTOMER ID</td>
-                            <td>USERNAME</td>
-                            <td>NAME</td>
-                            <td>EMAIL</td>
+            </nav> 
+            <div id="customer1" class="col s12">
+                <table class="respnsive-table highlight">
+                    <tr>
+                        <td>BOOKING ID</td>
+                        <td>ORIGIN</td>
+                        <td>DESTINATION</td>
+                        <td>TOTAL</td>
+                        <td>GST</td>
+                        <td>NET TOTAL</td>
+                    </tr>  
+                    <%
+                        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
+                        PreparedStatement pp = null;
+                        int total = 0;
+                        int gst = 0;
+                        int netTotal = 0;
+                        int profit = 0;
+                        pp = con.prepareStatement("SELECT * FROM BOOKING where STATUS=?");  //taking all completed requests
+                        pp.setString(1, "COMPLETED");
+                        ResultSet rs = pp.executeQuery();
+                        while (rs.next()) {
 
-                        </tr>  
-                        <%
-                            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
-                            PreparedStatement pp = null;
-                            String status;
-                            pp = con.prepareStatement("SELECT * FROM CUSTOMER");    //getting customer details from table
+                            total = rs.getInt("TOTAL"); //inserting to table
+                    %>
+                    <td><%=rs.getInt("BOOKINGID")%></td>    
+                    <td><%=rs.getString("ORIGIN")%></td>                
+                    <td><%=rs.getString("DESTINATION")%></td>
+                    <td><%=rs.getInt("TOTAL")%></td>
+                    <td><%=gst = rs.getInt("TOTAL") * 5 / 100%></td> 
+                    <td><%=netTotal = rs.getInt("TOTAL") + gst%></td> 
+                    <tr></tr>
 
-                            ResultSet rs = pp.executeQuery();
-                            while (rs.next()) {
+                    <%
+                            profit += netTotal;
 
-                                //putting data in table
-%>      
-                        <td><%=rs.getInt("CUSTOMERID")%></td>    
-                        <td><%=rs.getString("USERNAME")%></td>                
-                        <td><%=rs.getString("NAME")%></td>
-                        <td><%=rs.getString("EMAIL")%></td> 
-                        <tr></tr>
-
-                        <%
-                            }
-                        %>
-                    </table>
-                </div>
-            </form>
+                        }
+                    %>
+                </table>       
+            </div>
+                <li>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <div class="divider"></div>
+            </li>
+            <div>
+                <p>Total Profit: <% out.println(profit);%></p>
+            </div>
         </div>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
