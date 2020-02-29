@@ -87,14 +87,19 @@
                             int profit = 0;
                             //int driverID =3;
                             //int driverID = Integer.parseInt(request.getParameter("driverID"));
+                            
                             int driverID = 0;
                             String driverIDStr = request.getParameter("driverID");
+                               String date = request.getParameter("date");
                             if (driverIDStr != null && driverIDStr.trim().length() > 0) {
                                 Integer.parseInt(driverIDStr);
                             }
-                            pp = con.prepareStatement("SELECT * FROM BOOKING where STATUS=? AND DRIVERID=?");  //taking all completed requests from specified driverid
+                            
+                            
+                            
+                            pp = con.prepareStatement("SELECT * FROM BOOKING where STATUS=? AND BOOKINGDATE=?");  //taking all completed requests from specified driverid
                             pp.setString(1, "COMPLETED");
-                            pp.setString(2,driverIDStr);
+                            pp.setString(2,date);
                             ResultSet rs = pp.executeQuery();
                             while (rs.next()) {
 
@@ -106,6 +111,7 @@
                         <td><%=rs.getInt("TOTAL")%></td>
                         <td><%=gst = rs.getInt("TOTAL") * 5 / 100%></td> 
                         <td><%=netTotal = rs.getInt("TOTAL") + gst%></td> 
+                          <td><%=rs.getString("BOOKINGDATE")%></td>
                         <tr></tr>
 
                         <%
@@ -114,7 +120,8 @@
                             }
                         %>
                     </table>      
-                    <input type="text" placeholder="driver id" name = "driverID" required>                
+                     
+                     <input type="text" placeholder="date" name = "date" required>   
             <input type="submit" value ="submit" name = "submit">
            </form>
             </div>
