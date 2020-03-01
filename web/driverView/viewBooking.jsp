@@ -63,7 +63,7 @@
                     </ul>
                 </div>
             </nav>
-            <form action="${pageContext.servletContext.contextPath}/bookingServlet3.do" method ="post">          
+            <form action="viewBooking.jsp">          
                 <div id="customer1" class="col s12">
                     <table class="respnsive-table highlight">
                         <tr>
@@ -78,6 +78,7 @@
                             PreparedStatement pp = null;
                             String status;
                             int driverid = 0;
+                            String date = request.getParameter("date");
                             pp = con.prepareStatement("SELECT * FROM DRIVER where USERNAME=?"); //getting driver id
                             pp.setString(1, (String) request.getSession().getAttribute("driver"));
                             ResultSet rs = pp.executeQuery();
@@ -87,9 +88,10 @@
                             }
                             pp.close();
                             rs.close();
-                            pp = con.prepareStatement("SELECT * FROM BOOKING where DRIVERID=? AND STATUS=?");    //taking all assigned requests
+                            pp = con.prepareStatement("SELECT * FROM BOOKING where DRIVERID=? AND STATUS=? AND BOOKINGDATE=?");    //taking all assigned requests
                             pp.setInt(1, driverid);
                             pp.setString(2, "ASSIGNED");
+                             pp.setString(3,date);
                             rs = pp.executeQuery();
                             while (rs.next()) {
 
@@ -99,7 +101,8 @@
                         <td><%=rs.getInt("CUSTOMERID")%></td>                
                         <td><%=rs.getString("ORIGIN")%></td>
                         <td><%=rs.getString("DESTINATION")%></td>
-                        <td><%=rs.getInt("TOTAL")%></td>                   
+                        <td><%=rs.getInt("TOTAL")%></td> 
+                        <td><%=rs.getString("BOOKINGDATE")%></td>
                         <tr></tr>
                         <%
                             }
@@ -107,8 +110,8 @@
                             rs.close();
                         %>
                     </table>
-                    <input type="text" name = "bookingID" placeholder="booking id" required>
-                    <input type="submit" value ="Complete" name = "complete">
+                    <input type="text" name = "date" placeholder="date" required>
+                      <input type="submit" value ="submit" name = "submit">
                 </div>
             </form>     
         </div>
