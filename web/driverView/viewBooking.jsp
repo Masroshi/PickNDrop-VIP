@@ -114,6 +114,12 @@
                       <input type="submit" value ="submit" name = "submit">
                 </div>
             </form>     
+                    
+                    <form action="${pageContext.servletContext.contextPath}/bookingServlet3.do" method ="post"> 
+                          <input type="text" name = "bookingID" placeholder="booking id" required>
+                         <input type="submit" value ="Complete" name = "complete">
+                           </form>     
+                    
         </div>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
