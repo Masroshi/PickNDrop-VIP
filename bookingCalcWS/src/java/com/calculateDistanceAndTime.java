@@ -23,13 +23,13 @@ public class calculateDistanceAndTime {
      */
     @WebMethod(operationName = "calculateDistanceAndTime")
     public int add(@WebParam(name = "i") int i, @WebParam(name = "j") int j) {
-        //TODO write your implementation code here:        
+        //TODO write your implementation code here:
+        
         Double bookingfee = 1.5;
         Double baserate = 0.1;
-        Double drivetime = 0.2;
-        int time = i;
+        int time = i/60;            //changing seconds to minute
         int distance = j;
-        int sum = (int) ((baserate*distance)+(drivetime * time) + bookingfee);
+        int sum = (int) ((baserate*distance)+ time + bookingfee);
         
         return sum;
     }
