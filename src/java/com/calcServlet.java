@@ -29,10 +29,10 @@ import model.DB;
  * @author NUser1
  */
 public class calcServlet extends HttpServlet {
-
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/calculateDistanceAndTime/calculateDistanceAndTime.wsdl")
     private CalculateDistanceAndTime_Service service;
 
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,11 +64,12 @@ public class calcServlet extends HttpServlet {
                 request.setAttribute("sum", sum);
                 request.setAttribute("od", origin2);
                 request.setAttribute("do", destination2);
+                String bookingAdded = "false";
                 DB conn = new DB();
 
                 Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
                 PreparedStatement pp = null;
-                bookingList.add(new Booking(origin2, destination2, duration2, distance2, date2, time2, sum, status));
+                //bookingList.add(new Booking(origin2, destination2, duration2, distance2, date2, time2, sum, status));
                 int id = 0;
                 pp = con.prepareStatement("SELECT * FROM CUSTOMER where USERNAME=?");
                 pp.setString(1, (String) request.getSession().getAttribute("customer"));
@@ -76,9 +77,11 @@ public class calcServlet extends HttpServlet {
                 while (rs.next()) {
 
                     id = rs.getInt("CUSTOMERID");
+                    bookingAdded = "true";
                     
                 }
                 rs.close();
+                
                 pp = con.prepareStatement("INSERT INTO BOOKING (CUSTOMERID, ORIGIN, DESTINATION, DURATION, DISTANCE, BOOKINGDATE, BOOKINGTIME, TOTAL, STATUS)" + "VALUES(?,?,?,?,?,?,?,?,?)");
                 pp.setInt(1, id);
                 pp.setString(2, origin2);
@@ -91,8 +94,11 @@ public class calcServlet extends HttpServlet {
                 pp.setString(9, status);
                 pp.executeUpdate();
                 pp.close();
-                RequestDispatcher view = request.getRequestDispatcher("customerView/viewBooking.jsp");
-                view.forward(request, response);
+                
+                request.getSession().setAttribute("bookingAdded", bookingAdded);
+                response.sendRedirect("customerView/viewBooking.jsp");
+                
+               // bookingAdded = "false";
             } catch (SQLException ex) {
                 Logger.getLogger(calcServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -105,5 +111,7 @@ public class calcServlet extends HttpServlet {
         com.CalculateDistanceAndTime port = service.getCalculateDistanceAndTimePort();
         return port.calculateDistanceAndTime(i, j);
     }
+
+    
 
 }
