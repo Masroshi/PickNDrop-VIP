@@ -96,7 +96,7 @@
                             rs = pp.executeQuery();
                             while (rs.next()) {
                                 //inserting data to table
-                        %>
+%>
                         <td><%=rs.getInt("BOOKINGID")%></td>    
                         <td><%=rs.getInt("CUSTOMERID")%></td>                
                         <td><%=rs.getString("ORIGIN")%></td>
@@ -117,13 +117,38 @@
                 </div>
             </form>   
         </div>
+
+        <script>
+
+            <%                
+                //String added = (String) session.getAttribute("bookingAdded");
+                Object added = request.getSession().getAttribute("bookingAdded");
+                if (added!=null) {
+            %>
+                    alert("booking added");
+            <%
+                    //request.getSession().invalidate();
+                    session.removeAttribute("bookingAdded");
+                } else if(added == null) {
+            %>
+                    
+            <%
+                }else{
+                    
+                }
+            %>
+
+        </script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#body').show();
                 $('#msg').hide();
-            });
+
+
+            }
+            );
         </script>
 
     </body>
