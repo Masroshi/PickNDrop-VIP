@@ -18,7 +18,7 @@
 
             Loading, please wait...
         </div>
-       <div id="body" style="display:none;">
+        <div id="body" style="display:none;">
 
             <nav>
                 <div class="nav-wrapper">
@@ -59,6 +59,19 @@
                 </div>
             </nav>  
         </div>
+        <script>
+            <%
+                Object statusFail = request.getSession().getAttribute("statusFail");   //getting session
+                if (statusFail != null) {  //if it is not null
+            %>
+                    alert("Couldn't update driver status"); //alert couldn't update driver status
+            <%
+                    session.removeAttribute("statusFail"); //after that removing session so it can be created again when it can't update status
+                } else {  //else do nothing
+
+                }
+            %>
+        </script>                        
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#body').show();

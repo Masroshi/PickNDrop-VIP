@@ -96,7 +96,7 @@
                             rs = pp.executeQuery();
                             while (rs.next()) {
                                 //inserting data to table
-%>
+                        %>
                         <td><%=rs.getInt("BOOKINGID")%></td>    
                         <td><%=rs.getInt("CUSTOMERID")%></td>                
                         <td><%=rs.getString("ORIGIN")%></td>
@@ -120,21 +120,33 @@
 
         <script>
 
-            <%                
-                //String added = (String) session.getAttribute("bookingAdded");
-                Object added = request.getSession().getAttribute("bookingAdded");
-                if (added!=null) {
+            <%                Object added = request.getSession().getAttribute("bookingAdded");   //getting session
+                if (added != null) {  //if it is not null
             %>
-                    alert("booking added");
+            alert("Booking Added"); //alert it is added
             <%
-                    //request.getSession().invalidate();
-                    session.removeAttribute("bookingAdded");
-                } else if(added == null) {
+                    session.removeAttribute("bookingAdded"); //after that removing session so it can be created again when something new is added
+                } else {  //else do nothing
+
+                }
+
+                Object bookingDeleted = request.getSession().getAttribute("bookingDeleted");   //getting session
+                if (bookingDeleted != null) {  //if it is not null
             %>
-                    
+                    alert("Booking Cancelled"); //alert it is cancelled
             <%
-                }else{
-                    
+                    session.removeAttribute("bookingDeleted"); //after that removing session so it can be created again when something is cancelled
+                } else {  //else do nothing
+
+                }
+                Object bookingDeletedFail2 = request.getSession().getAttribute("bookingDeletedFail");   //getting session
+                if (bookingDeletedFail2 != null) {  //if it is not null
+            %>
+                    alert("Couldn't cancel booking"); //alert couldn't cancel
+            <%
+                    session.removeAttribute("bookingDeletedFail"); //after that removing session so it can be created again when it couldn't cancel booking
+                } else {  //else do nothing
+
                 }
             %>
 

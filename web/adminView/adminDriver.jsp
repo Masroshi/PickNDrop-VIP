@@ -81,7 +81,7 @@
                             while (rs.next()) {
 
                                 //inserting data to table
-                        %>
+%>
                         <td><%=rs.getInt("DRIVERID")%></td>    
                         <td><%=rs.getString("USERNAME")%></td>                
                         <td><%=rs.getString("NAME")%></td>
@@ -168,45 +168,88 @@
 
     </form>
 </div>
+<script>
+    <%
+        Object added = request.getSession().getAttribute("driverAdded");   //getting session
+        if (added != null) {  //if it is not null
+    %>
+            alert("Driver Added"); //alert it is added
+    <%
+            session.removeAttribute("driverAdded"); //after that removing session so it can be created again when something new is added
+        } else {  //else do nothing
+
+        }
+
+        Object removed = request.getSession().getAttribute("driverRemoved");   //getting session
+        if (removed != null) {  //if it is not null
+    %>
+            alert("Driver Removed"); //alert it is removed
+    <%
+            session.removeAttribute("driverRemoved"); //after that removing session so it can be created again when something is removed
+        } else {  //else do nothing
+
+        }
+
+        Object edit = request.getSession().getAttribute("driverEdit");   //getting session
+        if (edit != null) {  //if it is not null
+    %>
+            alert("Driver Edited"); //alert it is edited
+    <%
+            session.removeAttribute("driverEdit"); //after that removing session so it can be created again when something is edited
+        } else {  //else do nothing
+
+        }
+        Object removeFail2 = request.getSession().getAttribute("removeFail");   //getting session
+        if (removeFail2 != null) {  //if it is not null
+    %>
+            alert("Couldn't remove driver"); //alert it is edited
+    <%
+            session.removeAttribute("removeFail"); //after that removing session so it can be created again when something is edited
+        } else {  //else do nothing
+
+        }
+    %>
+
+</script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 <script type="text/javascript">
-            $(document).ready(function () {
-                $('#body').show();
-                $('#msg').hide();
-            });
+    $(document).ready(function () {
+        $('#body').show();
+        $('#msg').hide();
+    });
 
-            $(document).ready(function () {
-                $('.modal').modal();
-            });
+    $(document).ready(function () {
+        $('.modal').modal();
+    });
 
-            $(document).ready(function () {
-                $('.fixed-action-btn').floatingActionButton();
-            });
+    $(document).ready(function () {
+        $('.fixed-action-btn').floatingActionButton();
+    });
 
-            $(document).ready(function () {
-                $('.edit').click(function () {
-                    var currentTD = $(this).parents('tr').find('td');
-                    if ($(this).html() == 'Edit') {
-                        currentTD = $(this).parents('tr').find('td');
-                        $.each(currentTD, function () {
-                            $(this).prop('contenteditable', true)
-                        });
-                    } else {
-                        $.each(currentTD, function () {
-                            $(this).prop('contenteditable', false)
-                        });
-                    }
-
-                    $(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
-
+    $(document).ready(function () {
+        $('.edit').click(function () {
+            var currentTD = $(this).parents('tr').find('td');
+            if ($(this).html() == 'Edit') {
+                currentTD = $(this).parents('tr').find('td');
+                $.each(currentTD, function () {
+                    $(this).prop('contenteditable', true)
                 });
-
-            });
-
-            window.toggleFields = function toggleFields() {
-                $('#fields, #contact-btn').toggle();
+            } else {
+                $.each(currentTD, function () {
+                    $(this).prop('contenteditable', false)
+                });
             }
+
+            $(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+
+        });
+
+    });
+
+    window.toggleFields = function toggleFields() {
+        $('#fields, #contact-btn').toggle();
+    }
 </script>
 
 </body>

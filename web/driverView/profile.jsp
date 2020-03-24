@@ -62,56 +62,79 @@
                     </ul>
                 </div>
             </nav>  
-        
 
-        <form action="${pageContext.servletContext.contextPath}/availableServlet.do" method ="post">          
-            <div id="customer1" class="col s12">
-                <table class="respnsive-table highlight">
-                    <tr>
-                        <td>DRIVER ID</td>
-                        <td>USERNAME</td>
-                        <td>NAME</td>
-                        <td>EMAIL</td>
-                        <td>STATUS</td>
 
-                    </tr>  
-                    <%
-                        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
-                        PreparedStatement pp = null;
-                        String status;
-                        pp = con.prepareStatement("SELECT * FROM DRIVER where USERNAME=?"); //getting driver id
-                        pp.setString(1, (String) request.getSession().getAttribute("driver"));
-                        ResultSet rs = pp.executeQuery();
-                        while (rs.next()) {
+            <form action="${pageContext.servletContext.contextPath}/availableServlet.do" method ="post">          
+                <div id="customer1" class="col s12">
+                    <table class="respnsive-table highlight">
+                        <tr>
+                            <td>DRIVER ID</td>
+                            <td>USERNAME</td>
+                            <td>NAME</td>
+                            <td>EMAIL</td>
+                            <td>STATUS</td>
 
-                            //inserting data to table
-                    %>
-                    <td><%=rs.getInt("DRIVERID")%></td>    
-                    <td><%=rs.getString("USERNAME")%></td>                
-                    <td><%=rs.getString("NAME")%></td>
-                    <td><%=rs.getString("EMAIL")%></td> 
-                    <td><%=rs.getString("STATUS")%></td> 
-                    <tr></tr>
+                        </tr>  
+                        <%
+                            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
+                            PreparedStatement pp = null;
+                            String status;
+                            pp = con.prepareStatement("SELECT * FROM DRIVER where USERNAME=?"); //getting driver id
+                            pp.setString(1, (String) request.getSession().getAttribute("driver"));
+                            ResultSet rs = pp.executeQuery();
+                            while (rs.next()) {
 
-                    <%
-                        }
-                    %>
-                </table>
-                <input type="submit" name = "available" value ="Available">
-            </div>
-        </form> 
-        <form action="${pageContext.servletContext.contextPath}/availableServlet.do" method ="post">
-            <input type="submit" name = "notAvailable" value="Not Available">
-        </form>
-    </div>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#body').show();
-            $('#msg').hide();
-        });
-    </script>
+                                //inserting data to table
+%>
+                        <td><%=rs.getInt("DRIVERID")%></td>    
+                        <td><%=rs.getString("USERNAME")%></td>                
+                        <td><%=rs.getString("NAME")%></td>
+                        <td><%=rs.getString("EMAIL")%></td> 
+                        <td><%=rs.getString("STATUS")%></td> 
+                        <tr></tr>
 
-</body>
+                        <%
+                            }
+                        %>
+                    </table>
+                    <input type="submit" name = "available" value ="Available">
+                </div>
+            </form> 
+            <form action="${pageContext.servletContext.contextPath}/availableServlet.do" method ="post">
+                <input type="submit" name = "notAvailable" value="Not Available">
+            </form>
+        </div>
+        <script>
+            <%
+                Object available = request.getSession().getAttribute("available");   //getting session
+                if (available != null) {  //if it is not null
+            %>
+                    alert("Status changed to Available"); //alert status is changed to available
+            <%
+                    session.removeAttribute("available"); //after that removing session so it can be created again when clicked available button
+                } else {  //else do nothing
+
+                }
+            
+                Object notAvailable = request.getSession().getAttribute("notAvailable");   //getting session
+                if (notAvailable != null) {  //if it is not null
+            %>
+                    alert("Status changed to Not Available"); //alert status is changed to available
+            <%
+                    session.removeAttribute("notAvailable"); //after that removing session so it can be created again when clicked not available button
+                } else {  //else do nothing
+
+                }
+            %>    
+        </script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#body').show();
+                $('#msg').hide();
+            });
+        </script>
+
+    </body>
 </html>

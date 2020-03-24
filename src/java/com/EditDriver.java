@@ -80,6 +80,8 @@ public class EditDriver extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String driverEdit = "false";
+        String editFail = "false";
         if (save != null) {
             try {
                 //Register JDBC driver
@@ -94,7 +96,8 @@ public class EditDriver extends HttpServlet {
                 pp.setString(4, email);
                 pp.setInt(5, driverID);
                 pp.executeUpdate();
-
+                driverEdit = "true";
+                request.getSession().setAttribute("driverEdit", driverEdit);
                 //Execute SQL query
                 System.out.println("Edited...");
                 response.sendRedirect("adminView/adminDriver.jsp");
@@ -126,6 +129,8 @@ public class EditDriver extends HttpServlet {
                     "CRUD complete!");
 
         } else {
+            editFail = "true";
+            request.getSession().setAttribute("editFail", editFail);
             response.sendRedirect("adminView/admin.jsp");
         }
     }

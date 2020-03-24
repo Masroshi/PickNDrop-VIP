@@ -80,6 +80,8 @@ public class AddDriver extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String driverAdded = "false";
+        String addFail = "false";
         if (add != null) {
             try {
                 //Register JDBC driver
@@ -97,10 +99,10 @@ public class AddDriver extends HttpServlet {
                 pp.setString(2, name);
                 pp.setString(3, password);
                 pp.setString(4, email);
-                
+                driverAdded = "true";
                 //Execute SQL query
                 pp.executeUpdate();
-                
+                request.getSession().setAttribute("driverAdded", driverAdded);
                 System.out.println("Added...");
                 response.sendRedirect("adminView/adminDriver.jsp");
                 
@@ -130,6 +132,10 @@ public class AddDriver extends HttpServlet {
             System.out.println(
                     "CRUD complete!");
 
+        }else {
+            addFail = "true";
+            request.getSession().setAttribute("addFail", addFail);
+            response.sendRedirect("adminView/admin.jsp");
         }
     }
 }

@@ -78,7 +78,7 @@ public class calcServlet extends HttpServlet {
 
                     id = rs.getInt("CUSTOMERID");
                     bookingAdded = "true";
-                    
+                    request.getSession().setAttribute("bookingAdded", bookingAdded);
                 }
                 rs.close();
                 
@@ -95,7 +95,7 @@ public class calcServlet extends HttpServlet {
                 pp.executeUpdate();
                 pp.close();
                 
-                request.getSession().setAttribute("bookingAdded", bookingAdded);
+                
                 response.sendRedirect("customerView/viewBooking.jsp");
                 
                // bookingAdded = "false";

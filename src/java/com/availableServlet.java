@@ -41,6 +41,7 @@ public class availableServlet extends HttpServlet {
             PreparedStatement pp = null;
             String status = request.getParameter("available");
             String status2 = request.getParameter("notAvailable");
+            String statusFail = "false";         
             if (status != null) {
                 int driverid = 0;
                 pp = con.prepareStatement("SELECT * FROM DRIVER where USERNAME=?"); //getting driver id
@@ -48,7 +49,7 @@ public class availableServlet extends HttpServlet {
                 ResultSet rs = pp.executeQuery();
                 while (rs.next()) {
                     driverid = rs.getInt("DRIVERID");
-
+                    
                 }
                 pp = con.prepareStatement("SELECT * FROM DRIVER where DRIVERID=?"); //using driver id
                 pp.setInt(1, driverid);
@@ -58,6 +59,7 @@ public class availableServlet extends HttpServlet {
                     pp = con.prepareStatement("UPDATE DRIVER SET STATUS=? where DRIVERID=?"); //updating booking status
                     pp.setString(1, "AVAILABLE");
                     pp.setInt(2, driverid);
+                    request.getSession().setAttribute("available", status);
                     pp.executeUpdate();
 
                 }
@@ -81,6 +83,7 @@ public class availableServlet extends HttpServlet {
                     pp = con.prepareStatement("UPDATE DRIVER SET STATUS=? where DRIVERID=?"); //updating booking status
                     pp.setString(1, "NOT AVAILABLE");
                     pp.setInt(2, driverid);
+                    request.getSession().setAttribute("notAvailable", status2);
                     pp.executeUpdate();
 
                 }
@@ -88,6 +91,8 @@ public class availableServlet extends HttpServlet {
                 rs.close();
                 response.sendRedirect("driverView/profile.jsp");
             }else{
+                statusFail = "true";
+                request.getSession().setAttribute("statusFail", statusFail);
                 response.sendRedirect("driverView/driver.jsp");
             }
         } catch (SQLException ex) {

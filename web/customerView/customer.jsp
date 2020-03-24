@@ -59,6 +59,19 @@
                 </div>
             </nav> 
         </div>
+        <script>
+            <%
+                Object bookingDeletedFail = request.getSession().getAttribute("bookingDeletedFail");   //getting session
+                if (bookingDeletedFail != null) {  //if it is not null
+            %>
+                    alert("Couldn't cancel booking"); //alert couldn't cancel booking
+            <%
+                    session.removeAttribute("bookingDeletedFail"); //after that removing session so it can be created again when it can't cancel booking
+                } else {  //else do nothing
+
+                }
+            %>
+        </script>                        
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript">
