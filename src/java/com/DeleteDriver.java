@@ -78,7 +78,8 @@ public class DeleteDriver extends HttpServlet {
         System.out.println("Test");
         String delete = request.getParameter("delete");
         int driverID = Integer.parseInt(request.getParameter("driverID"));
-
+        String driverRemoved = "false";
+        String removeFail = "true";
         if (delete != null) {
             try {
                 //Register JDBC driver
@@ -93,6 +94,12 @@ public class DeleteDriver extends HttpServlet {
                     pp = con.prepareStatement("DELETE FROM DRIVER where DRIVERID=?");//Deleting bookingid
                     pp.setInt(1, driverID);
                     pp.executeUpdate();
+                    driverRemoved = "true";
+                    removeFail = "false";
+                    request.getSession().setAttribute("driverRemoved", driverRemoved);
+                }
+                if(removeFail.equals("true")){
+                    request.getSession().setAttribute("removeFail", removeFail);
                 }
                 System.out.println("Record Deleted");
                 response.sendRedirect("adminView/adminDriver.jsp");
@@ -124,6 +131,8 @@ public class DeleteDriver extends HttpServlet {
                     "CRUD complete!");
 
         } else {
+            removeFail = "true";
+            request.getSession().setAttribute("removeFail", removeFail);
             response.sendRedirect("adminView/admin.jsp");
         }
     }

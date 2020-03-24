@@ -47,6 +47,8 @@ public class bookingServlet extends HttpServlet {
         CUSTOMER BOOKING CANCELLING SERVLET
         */
         try {
+            String bookingDeleted = "false";
+            String bookingDeletedFail = "true";
             Object session = request.getSession().getAttribute("customer");
             //getting session
             
@@ -61,18 +63,28 @@ public class bookingServlet extends HttpServlet {
                     pp = con.prepareStatement("SELECT * FROM BOOKING where BOOKINGID=?");   //getting bookingid
                     pp.setInt(1, id);
                     ResultSet rs = pp.executeQuery();
+                    
                     while(rs.next()){
                         
                          pp = con.prepareStatement("DELETE FROM BOOKING where BOOKINGID=?");    //deleting booking id
                          pp.setInt(1, id);
+                         bookingDeleted = "true";
+                         bookingDeletedFail = "false";
+                         request.getSession().setAttribute("bookingDeleted", bookingDeleted);
                          pp.executeUpdate();
+                         
+                    }
+                    if(bookingDeletedFail.equals("true")){
+                        request.getSession().setAttribute("bookingDeletedFail", bookingDeletedFail);
                     }
                     pp.close();
                     rs.close();
                     response.sendRedirect("customerView/viewBooking.jsp");
 
                 } else {
-                    response.sendRedirect("customerView/home.jsp");
+                    bookingDeletedFail = "true";
+                    request.getSession().setAttribute("bookingDeletedFail", bookingDeletedFail);
+                    response.sendRedirect("customerView/customer.jsp");
                 }
             } else {
                     

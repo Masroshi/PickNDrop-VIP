@@ -61,6 +61,39 @@
                 </div>
             </nav> 
         </div>
+        <script>
+            <%
+                Object addFail = request.getSession().getAttribute("addFail");   //getting session
+                if (addFail != null) {  //if it is not null
+            %>
+            alert("Couldn't add driver"); //alert couldn't add
+            <%
+                    session.removeAttribute("addFail"); //after that removing session so it can be created again or else would spam alert message
+                } else {  //else do nothing
+
+                }
+
+                Object removeFail = request.getSession().getAttribute("removeFail");   //getting session
+                if (removeFail != null) {  //if it is not null
+            %>
+            alert("Couldn't remove driver"); //alert couldn't remove
+            <%
+                    session.removeAttribute("removeFail"); //after that removing session so it can be created again or else would spam alert message
+                } else {  //else do nothing
+
+                }
+
+                Object editFail = request.getSession().getAttribute("editFail");   //getting session
+                if (editFail != null) {  //if it is not null
+            %>
+            alert("Couldn't edit driver"); //alert couldn't edit
+            <%
+                    session.removeAttribute("editFail"); //after that removing session so it can be created again or else wouuld spam alert message
+                } else {  //else do nothing
+
+                }
+            %>
+        </script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript">
