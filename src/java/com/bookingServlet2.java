@@ -69,8 +69,10 @@ public class bookingServlet2 extends HttpServlet {
         /*
         ADMIN ASSIGNING DRIVER SERVLET
         */
-        Object session2 = request.getSession().getAttribute("admin");
-        String assign = request.getParameter("assign");     //getting sessions
+        Object session2 = request.getSession().getAttribute("admin");   //getting sessions
+        String assign = request.getParameter("assign"); 
+        String driverAssigned = "false";
+        String driverAssignedFail = "true";
         if (session2 != null) {
 
             if (assign != null) {   //if not null
@@ -81,7 +83,7 @@ public class bookingServlet2 extends HttpServlet {
                     int driverID = Integer.parseInt(request.getParameter("driverID"));
                     int bookingID = Integer.parseInt(request.getParameter("bookingID"));    //getting parameters
                     String assigned = "ASSIGNED";
-                    String status = null;
+                    String status = "";
                     pp = con.prepareStatement("SELECT * FROM DRIVER where DRIVERID=?");   //getting bookingid
                     pp.setInt(1, driverID);
                     ResultSet rs = pp.executeQuery();
@@ -99,12 +101,19 @@ public class bookingServlet2 extends HttpServlet {
                         pp.setString(1, assigned);
                         pp.setInt(2, driverID);
                         pp.setInt(3, bookingID);
+                        driverAssigned = "true";
+                        driverAssignedFail = "false";
+                        request.getSession().setAttribute("driverAssigned", driverAssigned);
                         pp.executeUpdate();
+                    }
+                    if(driverAssignedFail.equals("true")){
+                        request.getSession().setAttribute("driverAssignedFail", driverAssignedFail);
                     }
                     pp.close();
                     rs.close();
                     response.sendRedirect("adminView/adminDriverAssign.jsp");
                     }else{
+                        request.getSession().setAttribute("driverAssignedFail", driverAssignedFail);
                         response.sendRedirect("adminView/adminDriverAssign.jsp");
                     }
                 } catch (SQLException ex) {

@@ -67,7 +67,7 @@
                 <div id="customer1" class="col s12">
                     <table class="respnsive-table highlight">
                         <tr>
-                            <td>DRIVER ID</td>
+                            <td>BOOKING ID</td>
                             <td>CUSTOMER ID</td>
                             <td>ORIGIN</td>
                             <td>DESTINATION</td>
@@ -94,7 +94,7 @@
                             while (rs.next()) {
 
                                 //inserting to table
-                        %>
+%>
                         <td><%=rs.getInt("BOOKINGID")%></td>    
                         <td><%=rs.getInt("CUSTOMERID")%></td>                
                         <td><%=rs.getString("ORIGIN")%></td>
@@ -112,6 +112,28 @@
                 </div>
             </form>     
         </div>
+        <script>
+            <%
+                Object bookingComplete = request.getSession().getAttribute("bookingComplete");   //getting session
+                if (bookingComplete != null) {  //if it is not null
+            %>
+                    alert("Booking completed"); //alert booking completed
+            <%
+                    session.removeAttribute("bookingComplete"); //after that removing session so it can be created again when it completes booking
+                } else {  //else do nothing
+
+                }
+                Object bookingCompleteFail = request.getSession().getAttribute("bookingCompleteFail");   //getting session
+                if (bookingCompleteFail != null) {  //if it is not null
+            %>
+                    alert("Couldn't complete booking. Incorrect booking ID"); //alert couldn't complete incorrect booking id
+            <%
+                    session.removeAttribute("bookingCompleteFail"); //after that removing session so it can be created again when it can't complete booking
+                } else {  //else do nothing
+
+                }
+            %>
+        </script>            
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript">
