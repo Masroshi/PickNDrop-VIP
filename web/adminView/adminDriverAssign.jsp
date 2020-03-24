@@ -84,7 +84,7 @@
                             while (rs.next()) {
 
                                 //inserting to table
-%>
+                        %>
                         <td><%=rs.getInt("BOOKINGID")%></td>    
                         <td><%=rs.getInt("CUSTOMERID")%></td>                
                         <td><%=rs.getString("ORIGIN")%></td>
@@ -102,6 +102,28 @@
                 <input type="submit" value ="Assign" name = "assign">
             </form>
         </div>
+        <script>
+            <%
+                Object driverAssigned = request.getSession().getAttribute("driverAssigned");   //getting session
+                if (driverAssigned != null) {  //if it is not null
+            %>
+                    alert("Booking has been assigned to driver"); //alert book has been assigned to driver
+            <%
+                    session.removeAttribute("driverAssigned"); //after that removing session so it can be created again when it assigns driver
+                } else {  //else do nothing
+
+                }
+                Object driverAssignedFail = request.getSession().getAttribute("driverAssignedFail");   //getting session
+                if (driverAssignedFail != null) {  //if it is not null
+            %>
+                    alert("Couldn't assign driver. Incorrect booking ID or driver ID"); //alert incorrect booking id or driver id
+            <%
+                    session.removeAttribute("driverAssignedFail"); //after that removing session so it can be created again when it can't assign driver
+                } else {  //else do nothing
+
+                }
+            %>
+        </script>            
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript">

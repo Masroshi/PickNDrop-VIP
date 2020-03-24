@@ -70,8 +70,10 @@ public class bookingServlet3 extends HttpServlet {
         /*
         DRIVER BOOKING COMPLETING SERVLET
         */
-        Object session3 = request.getSession().getAttribute("driver");
-        String complete = request.getParameter("complete");         //getting sessions
+        Object session3 = request.getSession().getAttribute("driver");  //getting sessions
+        String complete = request.getParameter("complete");
+        String bookingComplete = "false";
+        String bookingCompleteFail = "true";
         int driverID = 0;
         if (session3 != null) {
 
@@ -81,23 +83,30 @@ public class bookingServlet3 extends HttpServlet {
                     Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
                     PreparedStatement pp = null;
                     int bookingID = Integer.parseInt(request.getParameter("bookingID"));
+                    pp = con.prepareStatement("SELECT * FROM DRIVER where USERNAME=?");     //getting username
+                    pp.setString(1, (String) request.getSession().getAttribute("driver"));
+                    ResultSet rs = pp.executeQuery();
+                    while (rs.next()) {
+                        driverID = rs.getInt("DRIVERID");
+                        
+                    }
                     String status = "COMPLETED";                //getting parameters
 
-                    pp = con.prepareStatement("SELECT * FROM BOOKING where BOOKINGID=?");       //getting bookingid
+                    pp = con.prepareStatement("SELECT * FROM BOOKING where BOOKINGID=? AND DRIVERID=?");       //getting bookingid
                     pp.setInt(1, bookingID);
-                    ResultSet rs = pp.executeQuery();
+                    pp.setInt(2, driverID);
+                    rs = pp.executeQuery();
                     while (rs.next()) {
                         pp = con.prepareStatement("UPDATE BOOKING SET STATUS=? where BOOKINGID=?");     //updating booking status
                         pp.setString(1, status);
                         pp.setInt(2, bookingID);
+                        bookingComplete = "true";
+                        bookingCompleteFail = "false";
+                        request.getSession().setAttribute("bookingComplete", bookingComplete);
                         pp.executeUpdate();
                     }
-                    pp = con.prepareStatement("SELECT * FROM DRIVER where USERNAME=?");     //getting username
-                    pp.setString(1, (String) request.getSession().getAttribute("driver"));
-                    rs = pp.executeQuery();
-                    while (rs.next()) {
-                        driverID = rs.getInt("DRIVERID");
-                        
+                    if(bookingCompleteFail.equals("true")){
+                        request.getSession().setAttribute("bookingCompleteFail", bookingCompleteFail);
                     }
                     pp.close();
                     rs.close();
