@@ -208,6 +208,15 @@
         } else {  //else do nothing
 
         }
+        Object addFail2 = request.getSession().getAttribute("addFail");   //getting session
+        if (addFail2 != null) {  //if it is not null
+    %>
+            alert("Couldn't add driver. Username or email already exists."); //alert it couldn't add driver
+    <%
+            session.removeAttribute("addFail"); //after that removing session so it can be created again when it cant add driver
+        } else {  //else do nothing
+
+        }
     %>
 
 </script>
