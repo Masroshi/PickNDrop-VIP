@@ -75,37 +75,55 @@ public class AddDriver extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String add = request.getParameter("add");
-        System.out.println("Test");
         String username = request.getParameter("username");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String driverAdded = "false";
-        String addFail = "false";
+        String addFail = "true";
+        String uNamestatus = "false";
+        String emailStatus = "false";
         if (add != null) {
             try {
                 //Register JDBC driver
                 con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
                 Statement stmt = con.createStatement();
-                
-                String insert = "INSERT INTO DRIVER "
-                        + " (USERNAME, NAME, PASSWORD, EMAIL)" + " values (?, ?, ?, ?)";
-
                 PreparedStatement pp = null;
-                pp = con.prepareStatement(insert);
-                
-                //Set param values
+                pp = con.prepareStatement("SELECT * FROM DRIVER WHERE USERNAME=?");
                 pp.setString(1, username);
-                pp.setString(2, name);
-                pp.setString(3, password);
-                pp.setString(4, email);
-                driverAdded = "true";
-                //Execute SQL query
-                pp.executeUpdate();
-                request.getSession().setAttribute("driverAdded", driverAdded);
-                System.out.println("Added...");
-                response.sendRedirect("adminView/adminDriver.jsp");
+                ResultSet rs = pp.executeQuery();
+                while (rs.next()) {
+                    uNamestatus = "true";
+                }
                 
+                pp = con.prepareStatement("SELECT * FROM DRIVER WHERE EMAIL=?");
+                pp.setString(1, email);
+                rs = pp.executeQuery();
+                while (rs.next()) {
+                    emailStatus = "true";
+                }
+                if (emailStatus.equals("false") && uNamestatus.equals("false")) {
+                    String insert = "INSERT INTO DRIVER "
+                            + " (USERNAME, NAME, PASSWORD, EMAIL)" + " values (?, ?, ?, ?)";
+                    driverAdded = "true";
+                    addFail = "false";
+                    pp = con.prepareStatement(insert);
+                    request.getSession().setAttribute("driverAdded", driverAdded);
+
+                    //Set param values
+                    pp.setString(1, username);
+                    pp.setString(2, name);
+                    pp.setString(3, password);
+                    pp.setString(4, email);
+
+                    //Execute SQL query
+                    pp.executeUpdate();
+                    response.sendRedirect("adminView/adminDriver.jsp");
+                }else{
+                    addFail = "true";
+                    request.getSession().setAttribute("addFail", addFail);
+                    response.sendRedirect("adminView/adminDriver.jsp");
+                }
             } catch (SQLException se) {
                 //Handle errors for JDBC
                 se.printStackTrace();
@@ -129,10 +147,8 @@ public class AddDriver extends HttpServlet {
                 }//end finally try
             }//end try
 
-            System.out.println(
-                    "CRUD complete!");
 
-        }else {
+        } else {
             addFail = "true";
             request.getSession().setAttribute("addFail", addFail);
             response.sendRedirect("adminView/admin.jsp");
