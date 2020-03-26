@@ -48,8 +48,7 @@ public class calcServlet extends HttpServlet {
 
         Object session = request.getSession().getAttribute("customer");
         if (session == null) {
-            RequestDispatcher view = request.getRequestDispatcher("login.jsp");
-            view.forward(request, response);
+            response.sendRedirect("login.jsp");
 
         } else {
             try {
