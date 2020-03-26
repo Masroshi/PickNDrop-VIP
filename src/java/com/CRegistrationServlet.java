@@ -67,7 +67,7 @@ public class CRegistrationServlet extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String driverAdded = "false";
+        String customerAdded = "false";
         String addFail = "true";
         String uNamestatus = "false";
         String emailStatus = "false";
@@ -77,26 +77,27 @@ public class CRegistrationServlet extends HttpServlet {
                 con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
                 Statement stmt = con.createStatement();
                 PreparedStatement pp = null;
-                pp = con.prepareStatement("SELECT * FROM DRIVER WHERE USERNAME=?");
+                pp = con.prepareStatement("SELECT * FROM CUSTOMER WHERE USERNAME=?");
                 pp.setString(1, username);
                 ResultSet rs = pp.executeQuery();
                 while (rs.next()) {
                     uNamestatus = "true";
                 }
                 
-                pp = con.prepareStatement("SELECT * FROM DRIVER WHERE EMAIL=?");
+                pp = con.prepareStatement("SELECT * FROM CUSTOMER WHERE EMAIL=?");
                 pp.setString(1, email);
                 rs = pp.executeQuery();
                 while (rs.next()) {
                     emailStatus = "true";
                 }
+                //if no matches in db
                 if (emailStatus.equals("false") && uNamestatus.equals("false")) {
-                    String insert = "INSERT INTO DRIVER "
+                    String insert = "INSERT INTO CUSTOMER "
                             + " (USERNAME, NAME, PASSWORD, EMAIL)" + " values (?, ?, ?, ?)";
-                    driverAdded = "true";
+                    customerAdded = "true";
                     addFail = "false";
                     pp = con.prepareStatement(insert);
-                    request.getSession().setAttribute("driverAdded", driverAdded);
+                    request.getSession().setAttribute("customerAdded", customerAdded);
 
                     //Set param values
                     pp.setString(1, username);
@@ -106,11 +107,11 @@ public class CRegistrationServlet extends HttpServlet {
 
                     //Execute SQL query
                     pp.executeUpdate();
-                    response.sendRedirect("adminView/adminDriver.jsp");
+                    response.sendRedirect("login.jsp");
                 }else{
                     addFail = "true";
                     request.getSession().setAttribute("addFail", addFail);
-                    response.sendRedirect("adminView/adminDriver.jsp");
+                    response.sendRedirect("Registration.jsp");
                 }
             } catch (SQLException se) {
                 //Handle errors for JDBC
@@ -137,9 +138,10 @@ public class CRegistrationServlet extends HttpServlet {
 
 
         } else {
+            //if it fails to register
             addFail = "true";
             request.getSession().setAttribute("addFail", addFail);
-            response.sendRedirect("adminView/admin.jsp");
+            response.sendRedirect("Registration.jsp");
         }
     }
 

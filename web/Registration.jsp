@@ -15,7 +15,7 @@
         <div class="container">
             <h5 class="indigo-text center"> Customer Registration</h5>
             <div class="row">
-                <form class="col s12" id="Registration" action="Registration.jsp" method="post">
+                <form class="col s12" id="Registration" action="CRegistrationServlet.do" method="post">
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="name" type="text" class="validate" required>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s4 right">
-                            <button class="btn btn-large btn-register waves-effect indigo" type="submit">Register</button>
+                            <button id= "add" value="add" name="add" type="submit" class="waves-effect waves-light btn">Register</button>
                         </div>
                     </div>
                 </form>
