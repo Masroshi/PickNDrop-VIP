@@ -7,14 +7,19 @@ package com;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -31,48 +36,111 @@ public class CRegistrationServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    static final String driver = "org.apache.derby.jdbc.ClientDriver";
-    static final String databaseUrl = "jdbc:derby://localhost:1527/SprintTwoDatabase";
-    static final String USER = "root";
-    static final String PASS = "root";
-    private Connection connection = null;
-    static Statement stmt = null;
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
+    }
+    
+    // JDBC driver name and database URL
+    static final String DB_URL = "jdbc:derby://localhost:1527/CRUDTest";
+
+    //  Database credentials
+    static Connection con = null;
+    static Statement stmt = null;
+    static String ch = null;
+
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            
-            Class.forName(driver);
+        response.setContentType("text/html;charset=UTF-8");
+        String add = request.getParameter("add");
+        String username = request.getParameter("username");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String driverAdded = "false";
+        String addFail = "true";
+        String uNamestatus = "false";
+        String emailStatus = "false";
+        if (add != null) {
+            try {
+                //Register JDBC driver
+                con = DriverManager.getConnection("jdbc:derby://localhost:1527/SprintTwoDatabase", "root", "root");
+                Statement stmt = con.createStatement();
+                PreparedStatement pp = null;
+                pp = con.prepareStatement("SELECT * FROM DRIVER WHERE USERNAME=?");
+                pp.setString(1, username);
+                ResultSet rs = pp.executeQuery();
+                while (rs.next()) {
+                    uNamestatus = "true";
+                }
+                
+                pp = con.prepareStatement("SELECT * FROM DRIVER WHERE EMAIL=?");
+                pp.setString(1, email);
+                rs = pp.executeQuery();
+                while (rs.next()) {
+                    emailStatus = "true";
+                }
+                if (emailStatus.equals("false") && uNamestatus.equals("false")) {
+                    String insert = "INSERT INTO DRIVER "
+                            + " (USERNAME, NAME, PASSWORD, EMAIL)" + " values (?, ?, ?, ?)";
+                    driverAdded = "true";
+                    addFail = "false";
+                    pp = con.prepareStatement(insert);
+                    request.getSession().setAttribute("driverAdded", driverAdded);
 
-            connection = DriverManager.getConnection(databaseUrl, USER, PASS);
-            stmt = connection.createStatement();
+                    //Set param values
+                    pp.setString(1, username);
+                    pp.setString(2, name);
+                    pp.setString(3, password);
+                    pp.setString(4, email);
 
-            
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            
-            String insert = "INSERT INTO CUSTOMER "
-                    + " (USERNAME, NAME, PASSWORD, EMAIL) " + " values (?, ?, ?, ?)";
+                    //Execute SQL query
+                    pp.executeUpdate();
+                    response.sendRedirect("adminView/adminDriver.jsp");
+                }else{
+                    addFail = "true";
+                    request.getSession().setAttribute("addFail", addFail);
+                    response.sendRedirect("adminView/adminDriver.jsp");
+                }
+            } catch (SQLException se) {
+                //Handle errors for JDBC
+                se.printStackTrace();
+            } catch (Exception e) {
+                //Handle errors for Class.forName
+                e.printStackTrace();
+            } finally {
+                //finally block used to close resources
+                try {
+                    if (stmt != null) {
+                        con.close();
+                    }
+                } catch (SQLException se) {
+                }
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }//end finally try
+            }//end try
 
-            PreparedStatement pp = null;
-            pp = connection.prepareStatement(insert);
 
-            //set param values
-            pp.setString(1, username);
-            pp.setString(2, name);
-            pp.setString(3, password);
-            pp.setString(4, email);
-
-            //Execute SQL query
-            pp.executeUpdate();
-            response.sendRedirect("login.jsp");
-        } catch (SQLException ex) {
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CRegistrationServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        } else {
+            addFail = "true";
+            request.getSession().setAttribute("addFail", addFail);
+            response.sendRedirect("adminView/admin.jsp");
+        }
     }
 
 }
